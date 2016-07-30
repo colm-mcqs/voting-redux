@@ -1,5 +1,6 @@
 "use strict";
 import {List, Map} from 'immutable';
+export const INITIAL_STATE = Map();
 
 function getWinners(vote){
     if(!vote) return [];
@@ -19,6 +20,12 @@ export function next(state) {
         .get('entries')
         .concat(getWinners(state.get('vote')));
 
+    if(entries.size==1){
+        return state.remove('vote')
+            .remove('entries')
+            .set('winner', entries.first())
+    }
+
     return state.merge({
         vote: Map({
             pair: entries.take(2)
@@ -27,9 +34,9 @@ export function next(state) {
     })
 }
 
-export function vote(state, entry){
-    return state.updateIn(
-        ['vote', 'tally', entry],
+export function vote(voteState, entry){
+    return voteState.updateIn(
+        ['tally', entry],
         0,
         tally => tally +1
     );
