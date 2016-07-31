@@ -98,6 +98,16 @@ describe('application logic', () => {
     });
 
     describe('vote', () => {
+        it('does not allow a vote if the entry is not in the pair', () => {
+            const state = Map({
+                pair: List.of('Trainspotting', '28 Days Later')
+            });
+            const nextState = vote(state, '127 Hours');
+            expect(nextState).to.equal(Map({
+                pair: List.of('Trainspotting', '28 Days Later')
+            }));
+        });
+
         it('creates a tally for the voted entry', () => {
             const state = Map({
                 pair: List.of('Trainspotting', '28 Days Later')
